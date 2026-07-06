@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package errors.v1;
+
+option go_package = "github.com/balcieren/grpc-errors-go/proto/errors;errorspb";
+
+import "google/protobuf/descriptor.proto";
+import "google/rpc/code.proto";
+
+// ErrorDef defines a single error that can be attached to an RPC method.
+// It carries all metadata needed for code generation and runtime error handling.
+message ErrorDef {
+  // Unique error code identifier, e.g. "ERROR_NOT_FOUND".
+  string error_code = 1;
+
+  // Message template with {{placeholder}} syntax, e.g. "User '{{id}}' not found".
+  string message = 2;
+
+  // RPC status code (google.rpc.Code).
+  google.rpc.Code status_code = 3;
+
+  // Whether the client should retry the request on this error.
+  bool retryable = 4;
+
+  // Retry delay in milliseconds. If set, google.rpc.RetryInfo will use this delay
+  // instead of the default zero delay. Only meaningful when retryable is true.
+  optional int64 retry_delay_ms = 5;
+}
+
+// Extend MethodOptions to attach error definitions to individual RPC methods.
+// This allows errors to be defined declaratively in proto files and code-generated.
+extend google.protobuf.MethodOptions {
+  repeated ErrorDef rpc_error = 50001;
+}

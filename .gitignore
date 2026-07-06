@@ -1,0 +1,22 @@
+# Binaries
+/bin/
+*.exe
+*.test
+*.out
+
+# Generated code
+gen/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage.out
+coverage.txt
